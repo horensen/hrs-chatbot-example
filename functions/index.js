@@ -1,9 +1,13 @@
-const functions = require("firebase-functions");
+"use strict";
 
-// // Create and Deploy Your First Cloud Functions
-// // https://firebase.google.com/docs/functions/write-firebase-functions
-//
-// exports.helloWorld = functions.https.onRequest((request, response) => {
-//   functions.logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
+const functions = require("firebase-functions");
+const { WebhookClient } = require("dialogflow-fulfillment");
+const intents = require("./intents");
+
+exports.dialogflowFulfillment = functions.https.onRequest((request, response) => {
+  const agent = new WebhookClient({request, response});
+
+  let intentMap = new Map();
+  intentMap.set("Demo2.Gbtb.TicketPrice", intents.demo2GbtbTicketPrice(request));
+  agent.handleRequest(intentMap);
+});
