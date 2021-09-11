@@ -1,6 +1,4 @@
-const { Suggestion } = require("dialogflow-fulfillment");
-
-// HANDLING TEXT OR SPEECH REPLIES
+const agent = require("./agent");
 
 const describeList = (items, operator, language, formality) => {
   const conjunctionsMap = {
@@ -32,44 +30,6 @@ const pickAny = (items) => {
   return items[Math.floor(Math.random() * items.length)];
 };
 
-// HANDLING AGENT CONTEXT
-
-const updateContextParameters = (request, agent, contextName, newParams, lifespan = 5) => {
-  const currentParams = getContextParameters(request, contextName);
-
-  if (Object.keys(currentParams).length === 0) {
-    // if currentParams is {}
-    agent.context.set({ name: contextName, lifespan, parameters: newParams });
-  } else {
-    agent.context.set({ name: contextName, lifespan, parameters: { ...currentParams, ...newParams } });
-  }
-};
-
-const getContextParameters = (request, contextName) => {
-  const { outputContexts } = request.body.queryResult;
-
-  const filteredOutputContexts = outputContexts.filter((outputContext) =>
-    outputContext.name.includes(contextName.toLowerCase())
-  );
-
-  const firstMatchingContextHasParameters =
-    filteredOutputContexts && filteredOutputContexts[0] && filteredOutputContexts[0].parameters;
-
-  if (firstMatchingContextHasParameters) {
-    return filteredOutputContexts[0].parameters;
-  }
-
-  return {};
-};
-
-// HANDLING AGENT RICH REPLIES
-
-const showSuggestions = (agent, suggestions) => {
-  suggestions.forEach((suggestion) => agent.add(new Suggestion(suggestion)));
-};
-
-// MISC
-
 const identifyPeopleGroups = (participantTypes) => {
   let children;
   let adults;
@@ -87,8 +47,6 @@ const identifyPeopleGroups = (participantTypes) => {
 module.exports = {
   describeList,
   pickAny,
-  updateContextParameters,
-  getContextParameters,
-  showSuggestions,
-  identifyPeopleGroups
+  identifyPeopleGroups,
+  ...agent
 };

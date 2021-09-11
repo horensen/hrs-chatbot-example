@@ -1,3 +1,6 @@
+// For this demo purpose, only rates for Cloud Forest are shown.
+// Ideally, prices should be retrieved from an external API.
+
 const localRate = {
   senior: 8,
   adult: 12,
@@ -19,5 +22,7 @@ const getTotalPrice = (children = 0, adults = 0, seniors = 0, isLocal) => {
 };
 
 module.exports = {
+  localRate,
+  nonLocalRate,
   getTotalPrice
 };
