@@ -2,7 +2,7 @@ const { Card, Payload } = require("dialogflow-fulfillment");
 
 // CONTEXT
 
-const updateContextParameters = (request, agent, contextName, newParams, lifespan = 5) => {
+const updateContextParameters = (request, agent, contextName, newParams, lifespan) => {
   const currentParams = getContextParameters(request, contextName);
 
   if (Object.keys(currentParams).length === 0) {
@@ -66,10 +66,9 @@ const showSuggestions = (agent, text, suggestions, isEphemeral, randomise) => {
 
 const showCards = (agent, text, cards) => {
   agent.add(text);
-
   cards.forEach(card => {
     if (card.condition === true) agent.add(new Card(card));
-  })
+  });
 }
 
 module.exports = {
