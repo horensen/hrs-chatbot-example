@@ -1,20 +1,9 @@
 const services = require("../services");
 const utils = require("../utils");
 
-const promptCitizenship = (agent, text) => {
-  const suggestions = ["Singaporeans", "PRs", "Foreigners"];
-  utils.showSuggestions(agent, text, suggestions, true, false);
-};
-
-const promptPeople = (agent, text) => {
-  const suggestions = ["2 adults, 2 children", "2 adults, 1 child", "1 adult, 2 seniors", "2 adults", "1 adult"];
-  utils.showSuggestions(agent, text, suggestions, true, true);
-};
-
-const promptSite = (agent, text) => {
-  const suggestions = ["✅ Cloud Forest", "Flower Dome", "OCBC Skyway", "Supertree Observatory", "Floral Fantasy"];
-  utils.showSuggestions(agent, text, suggestions, true, true);
-};
+const promptCitizenship = require("./promptCitizenship");
+const promptParticipants = require("./promptParticipants");
+const promptSite = require("./promptSite");
 
 const replyTicketPrice = (agent, citizenship, participants, site) => {
   const typeOfRates = citizenship === "Foreigner" ? "Standard" : "Local";
@@ -48,9 +37,7 @@ const replyTicketPrice = (agent, citizenship, participants, site) => {
       agent,
       `${typeOfRates} ${rates.length > 1 ? "rates are" : "rate is"} ${utils.describeList(
         rates,
-        "and",
-        "en",
-        1
+        "and"
       )} to the ${site}. The total is $${totalAmount}.`,
       [
         {
@@ -81,17 +68,14 @@ const replyTicketPrice = (agent, citizenship, participants, site) => {
     );
     // -------------------------------------------------------------------
   } else if (citizenship && peopleCount > 0) {
-    promptSite(
-      agent,
-      `${typeOfRates} ticket prices for ${utils.describeList(participants, "and", "en", 1)} to which site?`
-    );
+    promptSite(agent, `${typeOfRates} ticket prices for ${utils.describeList(participants, "and")} to which site?`);
     // -------------------------------------------------------------------
   } else if (citizenship && site) {
     const adultRate = typeOfRates === "Local" ? services.localRate.adult : services.nonLocalRate.adult;
     const childRate = typeOfRates === "Local" ? services.localRate.child : services.nonLocalRate.child;
     const seniorRate = typeOfRates === "Local" ? services.localRate.senior : services.nonLocalRate.senior;
 
-    promptPeople(
+    promptParticipants(
       agent,
       `${typeOfRates} ticket prices for how many children, adults and seniors to the ${site}? It is ${adultRate} per adult, $${childRate} per adult and $${seniorRate} per senior.`
     );
@@ -117,9 +101,7 @@ const replyTicketPrice = (agent, citizenship, participants, site) => {
       agent,
       `The standard ${rates.length > 1 ? "rates are" : "rate is"} ${utils.describeList(
         rates,
-        "and",
-        "en",
-        1
+        "and"
       )}. The total is $${totalAmount}.`,
       [
         {
@@ -155,27 +137,25 @@ const replyTicketPrice = (agent, citizenship, participants, site) => {
     if (chance >= 0.5) {
       promptSite(agent, `${typeOfRates} ticket price for which site?`);
     } else {
-      promptPeople(agent, `${typeOfRates} ticket prices for how many adults, children and seniors?`);
+      promptParticipants(agent, `${typeOfRates} ticket prices for how many adults, children and seniors?`);
     }
     // -------------------------------------------------------------------
   } else if (peopleCount > 0) {
     if (chance >= 0.5) {
-      promptSite(agent, `${utils.describeList(participants, "and", "en", 1)} for which site?`);
+      promptSite(agent, `${utils.describeList(participants, "and")} for which site?`);
     } else {
       promptCitizenship(
         agent,
         `Are there mostly Singaporeans, Permanent Residents (PRs) or foreigners among ${utils.describeList(
           participants,
-          "and",
-          "en",
-          1
+          "and"
         )}?`
       );
     }
     // -------------------------------------------------------------------
   } else if (site) {
     if (chance >= 0.5) {
-      promptPeople(agent, `Ticket price for how many adults, children and seniors going to the ${site}?`);
+      promptParticipants(agent, `Ticket price for how many adults, children and seniors going to the ${site}?`);
     } else {
       promptCitizenship(
         agent,
@@ -187,7 +167,7 @@ const replyTicketPrice = (agent, citizenship, participants, site) => {
     if (chance >= 0.6667) {
       promptSite(agent, "Ticket price for which site?");
     } else if (chance >= 0.3333) {
-      promptPeople(agent, "Ticket price for how many children, adults and seniors?");
+      promptParticipants(agent, "Ticket price for how many children, adults and seniors?");
     } else {
       promptCitizenship(agent, "Ticket price for Singaporeans, Permanent Residents (PRs) or foreigners?");
     }
@@ -195,9 +175,4 @@ const replyTicketPrice = (agent, citizenship, participants, site) => {
   }
 };
 
-module.exports = {
-  promptCitizenship,
-  promptPeople,
-  promptSite,
-  replyTicketPrice
-};
+module.exports = replyTicketPrice;

@@ -1,6 +1,6 @@
 const contexts = require("../contexts");
 const utils = require("../utils");
-const common = require("./common");
+const replies = require("../replies");
 
 module.exports = (request) => {
   // Slot filling parameters
@@ -21,7 +21,7 @@ module.exports = (request) => {
   return (agent) => {
     // Response based on parameter permutations
     if (requestIsTicketPriceEnquiry) {
-      common.replyTicketPrice(agent, citizenship, participants, site);
+      replies.replyTicketPrice(agent, citizenship, participants, site);
       // -------------------------------------------------------------------
     } else if (participants) {
       utils.showSuggestions(
@@ -33,7 +33,7 @@ module.exports = (request) => {
       );
       // -------------------------------------------------------------------
     } else {
-      common.promptPeople(agent, "How many children, adults and seniors?");
+      replies.promptPeople(agent, "How many children, adults and seniors?");
       // -------------------------------------------------------------------
     }
 

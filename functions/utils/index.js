@@ -1,20 +1,8 @@
 const agent = require("./agent");
 
-const describeList = (items, operator, language, formality) => {
-  const conjunctionsMap = {
-    en: {
-      and: ["and", "and", "and"],
-      or: ["or", "or", "or"]
-    },
-    zh: {
-      and: ["跟", "和", "与"],
-      or: ["还是", "或者", "或"]
-    }
-  };
-
-  const conjunction = conjunctionsMap[language][operator][formality];
-  const space = language === "en" ? " " : "";
-  const comma = language === "en" ? "," : "，";
+const describeList = (items, conjunction) => {
+  const space = " ";
+  const comma = ",";
 
   if (items.length === 1) return items[0];
   if (items.length === 2) return `${items[0]}${space}${conjunction}${space}${items[1]}`;

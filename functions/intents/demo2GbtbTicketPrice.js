@@ -1,6 +1,6 @@
 const contexts = require("../contexts");
 const utils = require("../utils");
-const common = require("./common");
+const replies = require("../replies");
 
 module.exports = (request) => {
   // Slot filling parameters
@@ -16,7 +16,7 @@ module.exports = (request) => {
 
   return (agent) => {
     // Reply based on parameter permutation
-    common.replyTicketPrice(agent, citizenship, participants, site);
+    replies.replyTicketPrice(agent, citizenship, participants, site);
 
     // Update conversation context
     utils.updateContextParameters(
