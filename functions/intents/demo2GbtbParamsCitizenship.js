@@ -13,7 +13,7 @@ module.exports = (request) => {
   const requestIsTicketPriceEnquiry =
     sessionContextParams &&
     sessionContextParams.currentTopic &&
-    sessionContextParams.currentTopic === "ticket_price_enquiry";
+    sessionContextParams.currentTopic === "ticket_price_inquiry";
 
   // Take values from slot filling, or otherwise from existing session context, to set in context later
   const citizenship = parameters.slot_citizenship || sessionContextParams.citizenship;

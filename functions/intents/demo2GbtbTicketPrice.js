@@ -23,7 +23,7 @@ module.exports = (request) => {
       request,
       agent,
       contexts.SESSION,
-      { currentTopic: "ticket_price_enquiry", citizenship, site, participants },
+      { currentTopic: "ticket_price_inquiry", citizenship, site, participants },
       5
     );
   };
