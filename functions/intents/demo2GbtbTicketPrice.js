@@ -19,12 +19,8 @@ module.exports = (request) => {
     replies.replyTicketPrice(agent, citizenship, participants, site);
 
     // Update conversation context
-    utils.updateContextParameters(
-      request,
-      agent,
-      contexts.SESSION,
-      { currentTopic: "ticket_price_inquiry", citizenship, site, participants },
-      5
-    );
+    const newContextParams = { currentTopic: "ticket_price_inquiry", citizenship, site, participants };
+    const lifespan = 5;
+    utils.updateContextParameters(request, agent, contexts.SESSION, newContextParams, lifespan);
   };
 };

@@ -24,20 +24,16 @@ module.exports = (request) => {
       replies.replyTicketPrice(agent, citizenship, participants, site);
       // -------------------------------------------------------------------
     } else if (participants) {
-      utils.showSuggestions(
-        agent,
-        `OK, noted the participants. How can I help?`,
-        ["Ticket prices"],
-        false,
-        false
-      );
+      utils.showSuggestions(agent, `OK, noted the participants. How can I help?`, ["Ticket prices"], false, false);
       // -------------------------------------------------------------------
     } else {
-      replies.promptPeople(agent, "How many children, adults and seniors?");
+      replies.promptParticipants(agent, "How many children, adults and seniors?");
       // -------------------------------------------------------------------
     }
 
     // Update conversation context
-    utils.updateContextParameters(request, agent, contexts.SESSION, { citizenship, site, participants }, 5);
+    const newContextParams = { citizenship, site, participants };
+    const lifespan = 5;
+    utils.updateContextParameters(request, agent, contexts.SESSION, newContextParams, lifespan);
   };
 };

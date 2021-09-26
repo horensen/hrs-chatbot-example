@@ -38,6 +38,8 @@ module.exports = (request) => {
     }
 
     // Update conversation context
-    utils.updateContextParameters(request, agent, contexts.SESSION, { citizenship, site, participants }, 5);
+    const newContextParams = {citizenship, site, participants};
+    const lifespan = 5;
+    utils.updateContextParameters(request, agent, contexts.SESSION, newContextParams, lifespan);
   };
 };
