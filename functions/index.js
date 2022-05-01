@@ -14,5 +14,6 @@ exports.dialogflowFulfillment = functions.https.onRequest((request, response) =>
   intentMap.set("Demo2.Gbtb.Params.Site", intents.demo2GbtbParamsSite(request));
   intentMap.set("Demo2.Gbtb.TicketPrice", intents.demo2GbtbTicketPrice(request));
   intentMap.set("Demo3.Covid19.Recommendations", intents.demo3Covid19Recommendations(request));
+  intentMap.set("Demo5.QueryForCode", intents.demo5QueryForCode(request));
   agent.handleRequest(intentMap);
 });
