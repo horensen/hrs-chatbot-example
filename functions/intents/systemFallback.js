@@ -1,25 +1,33 @@
 const { Configuration, OpenAIApi } = require("openai");
 
-const openai = new OpenAIApi(
-  new Configuration({
-    organization: process.env.OPENAI_ORGANIZATION,
-    apiKey: process.env.OPENAI_API_KEY
-  })
-);
+const openaiConfig = new Configuration({
+  organization: process.env.OPENAI_ORGANIZATION,
+  apiKey: process.env.OPENAI_API_KEY
+});
+const openai = new OpenAIApi(openaiConfig);
 
-module.exports = async (request) => {
+module.exports = (request) => {
   const { queryText } = request.body.queryResult;
 
-  return async (agent) => {
-    const response = await openai.createCompletion("text-davinci-002", {
-      prompt: queryText,
-      temperature: 0,
-      max_tokens: 100,
-      top_p: 1,
-      frequency_penalty: 0.2,
-      presence_penalty: 0
-    });
+  return (agent) => {
+    const engine = "text-davinci-002";
 
-    agent.add(response.data.choices[0].text);
+    return openai
+      .createCompletion(engine, {
+        prompt: queryText,
+        temperature: 0,
+        max_tokens: 100,
+        top_p: 1,
+        frequency_penalty: 0.2,
+        presence_penalty: 0
+      })
+      .then((response) => {
+        const answer = response.data.choices[0].text;
+        agent.add(answer);
+      })
+      .catch((error) => {
+        console.error(error);
+        agent.add("I don't know.");
+      });
   };
 };
