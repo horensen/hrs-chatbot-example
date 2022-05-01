@@ -10,16 +10,16 @@ const openai = new OpenAIApi(
 module.exports = async (request) => {
   const { queryText } = request.body.queryResult;
 
-  const response = await openai.createCompletion("text-davinci-002", {
-    prompt: queryText,
-    temperature: 0,
-    max_tokens: 100,
-    top_p: 1,
-    frequency_penalty: 0.2,
-    presence_penalty: 0
-  });
+  return async (agent) => {
+    const response = await openai.createCompletion("text-davinci-002", {
+      prompt: queryText,
+      temperature: 0,
+      max_tokens: 100,
+      top_p: 1,
+      frequency_penalty: 0.2,
+      presence_penalty: 0
+    });
 
-  return (agent) => {
-    agent.add(response);
+    agent.add(response.data.choices[0].text);
   };
 };
