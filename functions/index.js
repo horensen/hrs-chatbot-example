@@ -9,6 +9,7 @@ exports.dialogflowFulfillment = functions.https.onRequest((request, response) =>
   const agent = new WebhookClient({ request, response });
 
   const intentMap = new Map();
+  intentMap.set("*System.Fallback", intents.systemFallback(request));
   intentMap.set("Demo2.Gbtb.Params.Citizenship", intents.demo2GbtbParamsCitizenship(request));
   intentMap.set("Demo2.Gbtb.Params.Participants", intents.demo2GbtbParamsParticipants(request));
   intentMap.set("Demo2.Gbtb.Params.Site", intents.demo2GbtbParamsSite(request));
